@@ -95,11 +95,11 @@ const HelloWorldIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'HelloWorldIntent';
     },
     handle(handlerInput) {
-        const speechText = 'whats up';
+        const speechText = 'Hello';
         
         return handlerInput.responseBuilder
             .speak(speechText)
-            .reprompt('add a reprompt if you want to keep the session open for the user to respond')
+            .reprompt(speechText)
             .getResponse();
     }
 };
@@ -197,7 +197,7 @@ var instructions = {
   previousStep : function(){
     if(this.currentStep > 1){
         this.currentStep--;
-        this.responseText = 'You are now on step number ' + this.currentStep + '/' + this.instruction.length + ': ' + this.instruction[this.currentStep-1] + '.';
+        this.responseText = 'You are now on step number ' + this.currentStep + '/' + this.instruction.length + ': ' + this.instruction[this.currentStep-1];
     }
     else{
         this.responseText = 'You are on the first step.';
@@ -210,7 +210,7 @@ var instructions = {
           this.responseText = 'You must begin a lab to view steps. You can say "Begin lab" and the lab number to start a lab.'
       }
       else{
-           this.responseText = 'You are currently on step number ' + this.currentStep + '/' + this.instruction.length + ': ' + this.instruction[this.currentStep-1] + '. At any time you can say, "next step" or "previous step" to navagate the lab.';
+           this.responseText = 'You are currently on step number ' + this.currentStep + '/' + this.instruction.length + ': ' + this.instruction[this.currentStep-1] + ' At any time you can say, "next step" or "previous step" to navagate the lab.';
       }
            return this.responseText;
   },
