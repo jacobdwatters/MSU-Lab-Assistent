@@ -1,0 +1,107 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "msu lab assistant",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "HelloWorldIntent",
+                    "slots": [],
+                    "samples": [
+                        "hows it going",
+                        "hi",
+                        "hello"
+                    ]
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "VirtualAssistantIntent",
+                    "slots": [],
+                    "samples": [
+                        "what can you do",
+                        "whats next",
+                        "can you tell me what to do next",
+                        "I have a question",
+                        "question",
+                        "i need help",
+                        "help",
+                        "Can you help me"
+                    ]
+                },
+                {
+                    "name": "GetStepIntent",
+                    "slots": [],
+                    "samples": [
+                        "step",
+                        "Whats the current step",
+                        "What step am I on"
+                    ]
+                },
+                {
+                    "name": "NextStepIntent",
+                    "slots": [],
+                    "samples": [
+                        "move on to next step",
+                        "continue to next step",
+                        "move on",
+                        "next step",
+                        "Whats the next step"
+                    ]
+                },
+                {
+                    "name": "PreviousStepIntent",
+                    "slots": [],
+                    "samples": [
+                        "previous step",
+                        "last step"
+                    ]
+                },
+                {
+                    "name": "BeginLabIntent",
+                    "slots": [],
+                    "samples": [
+                        "begin",
+                        "start",
+                        "i would like to begin lab",
+                        "start lab",
+                        "begin lab"
+                    ]
+                },
+                {
+                    "name": "SearchIntent",
+                    "slots": [
+                        {
+                            "name": "Query",
+                            "type": "AMAZON.SearchQuery"
+                        },
+                        {
+                            "name": "CityList",
+                            "type": "AMAZON.US_CITY"
+                        }
+                    ],
+                    "samples": [
+                        "search for {Query} near me",
+                        "find out {Query}",
+                        "search for {Query}",
+                        "give me details about {CityList}"
+                    ]
+                }
+            ],
+            "types": []
+        }
+    }
+}
