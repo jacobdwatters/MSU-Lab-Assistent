@@ -2,8 +2,6 @@
 // Please visit https://alexa.design/cookbook for additional examples on implementing slots, dialog management,
 // session persistence, api calls, and more.
 const Alexa = require('ask-sdk-core');
-var stepNum = 1;
-var step = ["Write down name", "Go over materials checklist", "fill beaker to brim with water"];
 
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
@@ -24,10 +22,25 @@ const VirtualAssistantIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'VirtualAssistantIntent';
     },
     handle(handlerInput) {
-        const speechText = 'I am your MSU virtual lab assistant. What can I help you with?';
+        const speechText = 'I am your MSU virtual lab assistant. I help you complete your lab work. To begin lab say "begin lab" and the lab number.';
         return handlerInput.responseBuilder
             .speak(speechText)
             .reprompt('Is there anything else I can help with?')
+            .getResponse();
+    }
+};
+
+const BeginLabIntentHandler = {
+    canHandle(handlerInput) {
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+            && handlerInput.requestEnvelope.request.intent.name === 'BeginLabIntent';
+    },
+    handle(handlerInput) {
+        const speechText = instructions.loadInstructions() + instructions.getStepAndInstruction();
+        handlerInput.responseBuilder.speak("What lab would you like to begin?").getResponse();
+        return handlerInput.responseBuilder
+            .speak(speechText)
+            .reprompt()
             .getResponse();
     }
 };
@@ -38,7 +51,7 @@ const GetStepIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'GetStepIntent';
     },
     handle(handlerInput) {
-        const speechText = 'You are currently on step number ' + stepNum + ': ' + step[stepNum-1] + '. At any time you can say, "next step" to move on to the next step.';
+        const speechText = instructions.getStepAndInstruction();
         return handlerInput.responseBuilder
             .speak(speechText)
             .reprompt()
@@ -52,17 +65,23 @@ const NextStepIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'NextStepIntent';
     },
     handle(handlerInput) {
-        var temp;
-        if(stepNum < 3){
-            stepNum++;
-            temp = 'You are now on step number ' + stepNum + ': ' + step[stepNum-1] + '.';
-        }
-        else{
-            temp = 'You have completed all steps.';
-        }
+        const speechText = instructions.nextStep();
         
-        const speechText = temp;
-       
+        return handlerInput.responseBuilder
+            .speak(speechText)
+            .reprompt()
+            .getResponse();
+    }
+};
+
+const PreviousStepIntentHandler = {
+    canHandle(handlerInput) {
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+            && handlerInput.requestEnvelope.request.intent.name === 'PreviousStepIntent';
+    },
+    handle(handlerInput) {
+        const speechText = instructions.previousStep();
+        
         return handlerInput.responseBuilder
             .speak(speechText)
             .reprompt()
@@ -99,6 +118,7 @@ const HelpIntentHandler = {
             .getResponse();
     }
 };
+
 const CancelAndStopIntentHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'IntentRequest'
@@ -159,6 +179,54 @@ const ErrorHandler = {
     }
 };
 
+var instructions = {
+  responseText : '',
+  currentStep : 1,
+  instruction : null,
+  nextStep : function() {
+    if(this.currentStep < 3){
+        this.currentStep++;
+        this.responseText = 'You are now on step number ' + this.currentStep + ': ' + this.instruction[this.currentStep-1] + '.';
+    }
+    else{
+        this.responseText = 'You have completed all steps.';
+    }
+      
+    return this.responseText;
+  },
+  previousStep : function(){
+    if(this.currentStep > 1){
+        this.currentStep--;
+        this.responseText = 'You are now on step number ' + this.currentStep + '/' + this.instruction.length + ': ' + this.instruction[this.currentStep-1] + '.';
+    }
+    else{
+        this.responseText = 'You are on the first step.';
+    }
+      
+    return this.responseText;
+  },
+  getStepAndInstruction : function(){
+      if(this.instruction === null){
+          this.responseText = 'You must begin a lab to view steps. You can say "Begin lab" and the lab number to start a lab.'
+      }
+      else{
+           this.responseText = 'You are currently on step number ' + this.currentStep + '/' + this.instruction.length + ': ' + this.instruction[this.currentStep-1] + '. At any time you can say, "next step" or "previous step" to navagate the lab.';
+      }
+           return this.responseText;
+  },
+  loadInstructions : function(){
+    var fs = require("fs");
+    var text = fs.readFileSync("./Labs/lab1_instructions.txt").toString('utf-8');
+    this.instruction = text.split("\n");
+    this.responseText = "Starting lab one. ";
+    return this.responseText;
+  }, 
+  exitLab : function(){
+      this.instruction = null;
+      return "Exiting lab"
+  }
+};
+
 // This handler acts as the entry point for your skill, routing all request and response
 // payloads to the handlers above. Make sure any new handlers or interceptors you've
 // defined are included below. The order matters - they're processed top to bottom.
@@ -167,7 +235,9 @@ exports.handler = Alexa.SkillBuilders.custom()
         LaunchRequestHandler,
         HelloWorldIntentHandler,
         VirtualAssistantIntentHandler,
+        BeginLabIntentHandler,
         GetStepIntentHandler,
+        PreviousStepIntentHandler,
         NextStepIntentHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
