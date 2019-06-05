@@ -1,6 +1,7 @@
 scale
 paper
 250ml beaker
+pipette
 copper powder
 glacial acedic acid
 10% concentration hydrogen peroxide
