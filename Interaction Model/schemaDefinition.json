@@ -99,6 +99,19 @@
                         "search for {Query}",
                         "give me details about {CityList}"
                     ]
+                },
+                {
+                    "name": "MaterialsListIntent",
+                    "slots": [],
+                    "samples": [
+                        "do i need a hotplate",
+                        "do i need a pipete",
+                        "do I need a beaker",
+                        "list materials",
+                        "read me the materials list",
+                        "materials",
+                        "What materials do i need"
+                    ]
                 }
             ],
             "types": []
