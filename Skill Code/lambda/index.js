@@ -11,7 +11,7 @@ const LaunchRequestHandler = {
         const speechText = 'I am your MSU virtual lab assistant. What can I help you with?';
         return handlerInput.responseBuilder
             .speak(speechText)
-            .reprompt('Is there anyting else I can help you with?')
+            .reprompt()
             .getResponse();
     }
 };
@@ -25,7 +25,7 @@ const VirtualAssistantIntentHandler = {
         const speechText = 'I am your MSU virtual lab assistant. I help you complete your lab work. To begin lab say "begin lab" and the lab number.';
         return handlerInput.responseBuilder
             .speak(speechText)
-            .reprompt('Is there anything else I can help with?')
+            .reprompt()
             .getResponse();
     }
 };
@@ -36,8 +36,8 @@ const BeginLabIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'BeginLabIntent';
     },
     handle(handlerInput) {
+        materials.loadMaterialsList(); //loads the materials list for lab 1 from the text file located in ./Labs
         const speechText = instructions.loadInstructions() + instructions.getStepAndInstruction();
-        handlerInput.responseBuilder.speak("What lab would you like to begin?").getResponse();
         return handlerInput.responseBuilder
             .speak(speechText)
             .reprompt()
@@ -52,6 +52,20 @@ const GetStepIntentHandler = {
     },
     handle(handlerInput) {
         const speechText = instructions.getStepAndInstruction();
+        return handlerInput.responseBuilder
+            .speak(speechText)
+            .reprompt()
+            .getResponse();
+    }
+};
+
+const MaterialsListIntentHandler = {
+    canHandle(handlerInput) {
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+            && handlerInput.requestEnvelope.request.intent.name === 'MaterialsListIntent';
+    },
+    handle(handlerInput) {
+        const speechText = materials.getMaterials()
         return handlerInput.responseBuilder
             .speak(speechText)
             .reprompt()
@@ -95,7 +109,7 @@ const HelloWorldIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'HelloWorldIntent';
     },
     handle(handlerInput) {
-        const speechText = 'Hello';
+        const speechText = 'Hello. If this is your first time using the vitual assistant, try ask what I can do.';
         
         return handlerInput.responseBuilder
             .speak(speechText)
@@ -110,7 +124,7 @@ const HelpIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'AMAZON.HelpIntent';
     },
     handle(handlerInput) {
-        const speechText = 'You can say hello to me! How can I help?';
+        const speechText = 'You can say begin lab by saying, begin lab and the lab number. How can I help?';
         
         return handlerInput.responseBuilder
             .speak(speechText)
@@ -179,14 +193,36 @@ const ErrorHandler = {
     }
 };
 
+var materials = {
+    responseText : '',
+    materials : null,
+    
+    loadMaterialsList : function() {
+        var fs = require("fs");
+        var text = fs.readFileSync("./Labs/lab1_materials_list.txt").toString('utf-8');
+        this.materials = text.split("\n");
+    },
+    getMaterials : function() {
+        if(materials === null) {
+            this.responseText = 'You must begin a lab to view materials. You can say "Begin lab" and the lab number to start a lab.'
+        }
+        else {
+             this.responseText = 'Here are the materials you will need. ' + this.materials.join(', ') + '.';    
+        }
+        
+        return this.responseText;
+  }
+};
+
 var instructions = {
   responseText : '',
   currentStep : 1,
   instruction : null,
+ 
   nextStep : function() {
     if(this.currentStep < 3){
         this.currentStep++;
-        this.responseText = 'You are now on step number ' + this.currentStep + ': ' + this.instruction[this.currentStep-1] + '.';
+        this.responseText = 'You are now on step number ' + this.currentStep + ' of ' + this.instruction.length + ': ' + this.instruction[this.currentStep-1];
     }
     else{
         this.responseText = 'You have completed all steps.';
@@ -197,7 +233,7 @@ var instructions = {
   previousStep : function(){
     if(this.currentStep > 1){
         this.currentStep--;
-        this.responseText = 'You are now on step number ' + this.currentStep + '/' + this.instruction.length + ': ' + this.instruction[this.currentStep-1];
+        this.responseText = 'You are now on step number ' + this.currentStep + ' of ' + this.instruction.length + ': ' + this.instruction[this.currentStep-1];
     }
     else{
         this.responseText = 'You are on the first step.';
@@ -210,7 +246,14 @@ var instructions = {
           this.responseText = 'You must begin a lab to view steps. You can say "Begin lab" and the lab number to start a lab.'
       }
       else{
-           this.responseText = 'You are currently on step number ' + this.currentStep + '/' + this.instruction.length + ': ' + this.instruction[this.currentStep-1] + ' At any time you can say, "next step" or "previous step" to navagate the lab.';
+           this.responseText = 'You are currently on step number ' + this.currentStep + ' of ' + this.instruction.length + ': ' + this.instruction[this.currentStep-1];
+      }
+      
+      if(this.currentStep === 1) {
+          this.responceText += ' At any time you can say, "next step" or "previous step" to navagate the lab.';
+      }
+      else if(this.currentStep === 2) {
+          this.responceText += ' At any time you can say, "what materials do I need?"';
       }
            return this.responseText;
   },
@@ -218,7 +261,7 @@ var instructions = {
     var fs = require("fs");
     var text = fs.readFileSync("./Labs/lab1_instructions.txt").toString('utf-8');
     this.instruction = text.split("\n");
-    this.responseText = "Starting lab one. ";
+    this.responseText = 'Starting lab one. ';
     return this.responseText;
   }, 
   exitLab : function(){
@@ -233,6 +276,7 @@ var instructions = {
 exports.handler = Alexa.SkillBuilders.custom()
     .addRequestHandlers(
         LaunchRequestHandler,
+        MaterialsListIntentHandler,
         HelloWorldIntentHandler,
         VirtualAssistantIntentHandler,
         BeginLabIntentHandler,
