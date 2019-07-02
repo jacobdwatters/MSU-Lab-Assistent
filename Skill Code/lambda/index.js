@@ -45,6 +45,21 @@ const BeginLabIntentHandler = {
     }
 };
 
+const ExitLabIntentHandler = {
+    canHandle(handlerInput) {
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+            && handlerInput.requestEnvelope.request.intent.name === 'ExitLabIntent';
+    },
+    handle(handlerInput) {
+        instructions.exitLab(); //Clears current materials list, instructions, and resets instruction counter.
+        const speechText = instructions.loadInstructions() + instructions.getStepAndInstruction();
+        return handlerInput.responseBuilder
+            .speak(speechText)
+            .reprompt()
+            .getResponse();
+    }
+};
+
 const GetStepIntentHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'IntentRequest'
@@ -220,7 +235,7 @@ var instructions = {
   instruction : null,
  
   nextStep : function() {
-    if(this.currentStep < 3){
+    if(this.currentStep < this.instruction.length){
         this.currentStep++;
         this.responseText = 'You are now on step number ' + this.currentStep + ' of ' + this.instruction.length + ': ' + this.instruction[this.currentStep-1];
     }
@@ -257,16 +272,19 @@ var instructions = {
       }
            return this.responseText;
   },
-  loadInstructions : function(){
+  loadInstructions : function() {
     var fs = require("fs");
     var text = fs.readFileSync("./Labs/lab1_instructions.txt").toString('utf-8');
     this.instruction = text.split("\n");
     this.responseText = 'Starting lab one. ';
     return this.responseText;
   }, 
-  exitLab : function(){
+  exitLab : function() {
       this.instruction = null;
-      return "Exiting lab"
+      this.materials = null;
+      this.currentStep = 1;
+      this.responseText = 'Starting lab one. ';
+      return this.responseText;
   }
 };
 
@@ -284,6 +302,7 @@ exports.handler = Alexa.SkillBuilders.custom()
         PreviousStepIntentHandler,
         NextStepIntentHandler,
         HelpIntentHandler,
+        ExitLabIntentHandler,
         CancelAndStopIntentHandler,
         SessionEndedRequestHandler,
         IntentReflectorHandler) // make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
