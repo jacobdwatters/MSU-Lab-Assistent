@@ -1,7 +1,7 @@
 {
     "interactionModel": {
         "languageModel": {
-            "invocationName": "msu lab assistant",
+            "invocationName": "msu virtual lab assistant",
             "intents": [
                 {
                     "name": "AMAZON.CancelIntent",
@@ -111,6 +111,18 @@
                         "read me the materials list",
                         "materials",
                         "What materials do i need"
+                    ]
+                },
+                {
+                    "name": "ExitLabIntent",
+                    "slots": [],
+                    "samples": [
+                        "quit",
+                        "quit lab",
+                        "close",
+                        "close lab",
+                        "exit lab",
+                        "exit"
                     ]
                 }
             ],
