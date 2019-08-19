@@ -1,14 +1,16 @@
 // This sample demonstrates handling intents from an Alexa skill using the Alexa Skills Kit SDK (v2).
 // Please visit https://alexa.design/cookbook for additional examples on implementing slots, dialog management,
 // session persistence, api calls, and more.
+
 const Alexa = require('ask-sdk-core');
+const main = require('./main.js');
 
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
     },
     handle(handlerInput) {
-        const speechText = 'I am your MSU virtual lab assistant. What can I help you with?';
+        var speechText = 'I am your MSU virtual lab assistant. What can I help you with?';
         return handlerInput.responseBuilder
             .speak(speechText)
             .reprompt()
@@ -36,8 +38,8 @@ const BeginLabIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'BeginLabIntent';
     },
     handle(handlerInput) {
-        materials.loadMaterialsList(); //loads the materials list for lab 1 from the text file located in ./Labs
-        const speechText = instructions.loadInstructions() + instructions.getStepAndInstruction();
+        main.materials.loadMaterialsList(); //loads the materials list for lab 1 from the text file located in ./Labs
+        const speechText = main.instructions.loadInstructions() + main.instructions.getStepAndInstruction();
         return handlerInput.responseBuilder
             .speak(speechText)
             .reprompt()
@@ -51,8 +53,9 @@ const ExitLabIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'ExitLabIntent';
     },
     handle(handlerInput) {
-        instructions.exitLab(); //Clears current materials list, instructions, and resets instruction counter.
-        const speechText = instructions.loadInstructions() + instructions.getStepAndInstruction();
+         //Clears current materials list, instructions, and resets instruction counter.
+        main.materials.exitLab();
+        const speechText = main.instructions.exitLab();
         return handlerInput.responseBuilder
             .speak(speechText)
             .reprompt()
@@ -66,7 +69,7 @@ const GetStepIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'GetStepIntent';
     },
     handle(handlerInput) {
-        const speechText = instructions.getStepAndInstruction();
+        const speechText = main.instructions.getStepAndInstruction();
         return handlerInput.responseBuilder
             .speak(speechText)
             .reprompt()
@@ -80,7 +83,7 @@ const MaterialsListIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'MaterialsListIntent';
     },
     handle(handlerInput) {
-        const speechText = materials.getMaterials()
+        const speechText = main.materials.getMaterials()
         return handlerInput.responseBuilder
             .speak(speechText)
             .reprompt()
@@ -94,7 +97,7 @@ const NextStepIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'NextStepIntent';
     },
     handle(handlerInput) {
-        const speechText = instructions.nextStep();
+        const speechText = main.instructions.nextStep();
         
         return handlerInput.responseBuilder
             .speak(speechText)
@@ -109,7 +112,7 @@ const PreviousStepIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'PreviousStepIntent';
     },
     handle(handlerInput) {
-        const speechText = instructions.previousStep();
+        const speechText = main.instructions.previousStep();
         
         return handlerInput.responseBuilder
             .speak(speechText)
@@ -206,86 +209,6 @@ const ErrorHandler = {
             .reprompt(speechText)
             .getResponse();
     }
-};
-
-var materials = {
-    responseText : '',
-    materials : null,
-    
-    loadMaterialsList : function() {
-        var fs = require("fs");
-        var text = fs.readFileSync("./Labs/lab1_materials_list.txt").toString('utf-8');
-        this.materials = text.split("\n");
-    },
-    getMaterials : function() {
-        if(materials === null) {
-            this.responseText = 'You must begin a lab to view materials. You can say "Begin lab" and the lab number to start a lab.'
-        }
-        else {
-             this.responseText = 'Here are the materials you will need. ' + this.materials.join(', ') + '.';    
-        }
-        
-        return this.responseText;
-  }
-};
-
-var instructions = {
-  responseText : '',
-  currentStep : 1,
-  instruction : null,
- 
-  nextStep : function() {
-    if(this.currentStep < this.instruction.length){
-        this.currentStep++;
-        this.responseText = 'You are now on step number ' + this.currentStep + ' of ' + this.instruction.length + ': ' + this.instruction[this.currentStep-1];
-    }
-    else{
-        this.responseText = 'You have completed all steps.';
-    }
-      
-    return this.responseText;
-  },
-  previousStep : function(){
-    if(this.currentStep > 1){
-        this.currentStep--;
-        this.responseText = 'You are now on step number ' + this.currentStep + ' of ' + this.instruction.length + ': ' + this.instruction[this.currentStep-1];
-    }
-    else{
-        this.responseText = 'You are on the first step.';
-    }
-      
-    return this.responseText;
-  },
-  getStepAndInstruction : function(){
-      if(this.instruction === null){
-          this.responseText = 'You must begin a lab to view steps. You can say "Begin lab" and the lab number to start a lab.'
-      }
-      else{
-           this.responseText = 'You are currently on step number ' + this.currentStep + ' of ' + this.instruction.length + ': ' + this.instruction[this.currentStep-1];
-      }
-      
-      if(this.currentStep === 1) {
-          this.responceText += ' At any time you can say, "next step" or "previous step" to navagate the lab.';
-      }
-      else if(this.currentStep === 2) {
-          this.responceText += ' At any time you can say, "what materials do I need?"';
-      }
-           return this.responseText;
-  },
-  loadInstructions : function() {
-    var fs = require("fs");
-    var text = fs.readFileSync("./Labs/lab1_instructions.txt").toString('utf-8');
-    this.instruction = text.split("\n");
-    this.responseText = 'Starting lab one. ';
-    return this.responseText;
-  }, 
-  exitLab : function() {
-      this.instruction = null;
-      this.materials = null;
-      this.currentStep = 1;
-      this.responseText = 'Starting lab one. ';
-      return this.responseText;
-  }
 };
 
 // This handler acts as the entry point for your skill, routing all request and response
