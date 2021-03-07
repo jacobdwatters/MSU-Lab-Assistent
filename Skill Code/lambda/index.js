@@ -1,9 +1,6 @@
-// This sample demonstrates handling intents from an Alexa skill using the Alexa Skills Kit SDK (v2).
-// Please visit https://alexa.design/cookbook for additional examples on implementing slots, dialog management,
-// session persistence, api calls, and more.
-
 const Alexa = require('ask-sdk-core');
 const main = require('./main.js');
+const vlaTxtReader = require('./vlaTxtReader.js');
 
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
@@ -18,19 +15,36 @@ const LaunchRequestHandler = {
     }
 };
 
+
 const VirtualAssistantIntentHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'IntentRequest'
             && handlerInput.requestEnvelope.request.intent.name === 'VirtualAssistantIntent';
     },
     handle(handlerInput) {
-        const speechText = 'I am your MSU virtual lab assistant. I help you complete your lab work. To begin lab say "begin lab" and the lab number.';
+        const speechText = 'I help you complete your lab work. Try saying "Begin Lab"';
         return handlerInput.responseBuilder
             .speak(speechText)
             .reprompt()
             .getResponse();
     }
 };
+
+
+const InstructionsIntenetHandler = {
+    canHandle(handlerInput) {
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+            && handlerInput.requestEnvelope.request.intent.name === 'InstructionsIntent';
+    },
+    handle(handlerInput) {
+        const speechText = 'Todays lab is Household Acids and Bases.';
+        return handlerInput.responseBuilder
+            .speak(speechText)
+            .reprompt()
+            .getResponse();
+    }
+};
+
 
 const BeginLabIntentHandler = {
     canHandle(handlerInput) {
@@ -46,6 +60,7 @@ const BeginLabIntentHandler = {
             .getResponse();
     }
 };
+
 
 const ExitLabIntentHandler = {
     canHandle(handlerInput) {
@@ -63,6 +78,7 @@ const ExitLabIntentHandler = {
     }
 };
 
+
 const GetStepIntentHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'IntentRequest'
@@ -77,6 +93,7 @@ const GetStepIntentHandler = {
     }
 };
 
+
 const MaterialsListIntentHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'IntentRequest'
@@ -90,6 +107,7 @@ const MaterialsListIntentHandler = {
             .getResponse();
     }
 };
+
 
 const NextStepIntentHandler = {
     canHandle(handlerInput) {
@@ -106,6 +124,7 @@ const NextStepIntentHandler = {
     }
 };
 
+
 const PreviousStepIntentHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'IntentRequest'
@@ -120,6 +139,7 @@ const PreviousStepIntentHandler = {
             .getResponse();
     }
 };
+
 
 const HelloWorldIntentHandler = {
     canHandle(handlerInput) {
@@ -136,6 +156,7 @@ const HelloWorldIntentHandler = {
     }
 };
 
+
 const HelpIntentHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'IntentRequest'
@@ -151,6 +172,24 @@ const HelpIntentHandler = {
     }
 };
 
+
+const remainingStepsIntentHandler = {
+    canHandle(handlerInput) {
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+            && handlerInput.requestEnvelope.request.intent.name === 'remainingStepsIntent';
+    },
+    handle(handlerInput) {
+        const speechText = main.instructions.getRemainingSteps();
+        
+        return handlerInput.responseBuilder
+            .speak(speechText)
+            .reprompt()
+            .getResponse();
+    }
+    
+} ;
+
+
 const CancelAndStopIntentHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'IntentRequest'
@@ -164,6 +203,8 @@ const CancelAndStopIntentHandler = {
             .getResponse();
     }
 };
+
+
 const SessionEndedRequestHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'SessionEndedRequest';
@@ -173,6 +214,7 @@ const SessionEndedRequestHandler = {
         return handlerInput.responseBuilder.getResponse();
     }
 };
+
 
 // The intent reflector is used for interaction model testing and debugging.
 // It will simply repeat the intent the user said. You can create custom handlers
@@ -211,6 +253,7 @@ const ErrorHandler = {
     }
 };
 
+
 // This handler acts as the entry point for your skill, routing all request and response
 // payloads to the handlers above. Make sure any new handlers or interceptors you've
 // defined are included below. The order matters - they're processed top to bottom.
@@ -222,6 +265,8 @@ exports.handler = Alexa.SkillBuilders.custom()
         VirtualAssistantIntentHandler,
         BeginLabIntentHandler,
         GetStepIntentHandler,
+        remainingStepsIntentHandler,
+        InstructionsIntenetHandler,
         PreviousStepIntentHandler,
         NextStepIntentHandler,
         HelpIntentHandler,
