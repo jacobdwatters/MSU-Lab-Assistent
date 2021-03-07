@@ -1,0 +1,65 @@
+\documentclass[12pt]{memoir}
+\usepackage{tikz}
+\pagenumbering{gobble}
+
+\begin{document}
+    \begin{vplace}[0.7]
+        \begin{center}
+            \begin{tikzpicture}[scale=0.2]
+                \tikzstyle{every node}+=[inner sep=0pt]
+                \draw [black] (33.1,-27.3) circle (3);
+                \draw (33.1,-27.3) node {$1$};
+                \draw [black] (45.4,-16.7) circle (3);
+                \draw (45.4,-16.7) node {$2$};
+                \draw [black] (45.4,-16.7) circle (2.4);
+                \draw [black] (50.8,-27.3) circle (3);
+                \draw (50.8,-27.3) node {$3$};
+                \draw [black] (50.8,-27.3) circle (2.4);
+                \draw [black] (45.4,-36.9) circle (3);
+                \draw (45.4,-36.9) node {$4$};
+                \draw [black] (45.4,-36.9) circle (2.4);
+                \draw [black] (33.1,-13.1) circle (3);
+                \draw (33.1,-13.1) node {$5$};
+                \draw [black] (33.1,-13.1) circle (2.4);
+                \draw [black] (20.4,-36.9) circle (3);
+                \draw (20.4,-36.9) node {$6$};
+                \draw [black] (20.4,-36.9) circle (2.4);
+                \draw [black] (21.1,-16.7) circle (3);
+                \draw (21.1,-16.7) node {$7$};
+                \draw [black] (34.423,-29.98) arc (54:-234:2.25);
+                \draw (33.1,-34.55) node [below] {$white\mbox{ }space$};
+                \fill [black] (31.78,-29.98) -- (30.9,-30.33) -- (31.71,-30.92);
+                \draw [black] (12,-27.3) -- (30.1,-27.3);
+                \draw (11.5,-27.3) node [left] {$start$};
+                \fill [black] (30.1,-27.3) -- (29.3,-26.8) -- (29.3,-27.8);
+                \draw [black] (35.37,-25.34) -- (43.13,-18.66);
+                \fill [black] (43.13,-18.66) -- (42.2,-18.8) -- (42.85,-19.56);
+                \draw (40.32,-22.49) node [below] {$<$};
+                \draw [black] (36.1,-27.3) -- (47.8,-27.3);
+                \fill [black] (47.8,-27.3) -- (47,-26.8) -- (47,-27.8);
+                \draw (41.95,-27.8) node [below] {$>$};
+                \draw [black] (33.1,-24.3) -- (33.1,-16.1);
+                \fill [black] (33.1,-16.1) -- (32.6,-16.9) -- (33.6,-16.9);
+                \draw (33.6,-20.2) node [right] {$/$};
+                \draw [black] (30.71,-29.11) -- (22.79,-35.09);
+                \fill [black] (22.79,-35.09) -- (23.73,-35.01) -- (23.13,-34.21);
+                \draw (22.52,-31.6) node [above] {$other\mbox{ }char$};
+                \draw [black] (35.46,-29.15) -- (43.04,-35.05);
+                \fill [black] (43.04,-35.05) -- (42.71,-34.17) -- (42.1,-34.96);
+                \draw (38.47,-32.6) node [below] {$:$};
+                \draw [black] (23.922,-17.707) arc (65.5582:31.53133:17.854);
+                \fill [black] (23.92,-17.71) -- (24.44,-18.49) -- (24.86,-17.58);
+                \draw (29.37,-20.09) node [above] {$\#$};
+                \draw [black] (17.72,-38.223) arc (324:36:2.25);
+                \draw (13.15,-36.9) node [left] {$not\mbox{ }<\mbox{ }or\mbox{ }>$};
+                \fill [black] (17.72,-35.58) -- (17.37,-34.7) -- (16.78,-35.51);
+                \draw [black] (18.42,-18.023) arc (324:36:2.25);
+                \draw (13.85,-16.7) node [left] {$not\mbox{ }newline$};
+                \fill [black] (18.42,-15.38) -- (18.07,-14.5) -- (17.48,-15.31);
+                \draw [black] (30.415,-25.966) arc (-119.82095:-143.08952:25.339);
+                \fill [black] (30.42,-25.97) -- (29.97,-25.13) -- (29.47,-26);
+                \draw (22.56,-23.46) node [below] {$newline$};
+            \end{tikzpicture}
+        \end{center}
+    \end{vplace}
+\end{document}
