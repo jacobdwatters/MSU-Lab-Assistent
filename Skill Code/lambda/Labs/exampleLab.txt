@@ -1,0 +1,99 @@
+# This is a comment
+# Author: Jacob Watters
+
+<title>
+        Household Acids and Bases
+</title>
+
+<introduction>
+        Many common household solutions contain acids and bases. Acid-base indicators, such as litmus and red cabbage juice, turn different colors in acidic and basic solutions.
+        They can, therefore, be used to show if a solution is acidic or basic. An acid turns blue litmus paper red, and a base turns red litmus paper blue. The acidity of a solution
+        can be expressed using the pH scale. Acidic solutions have pH values less than 7, basic solutions have pH values greater than 7, and neutral solutions have a pH value equal
+        to 7. In this experiment, you will a pH Sensor to determine the pH values of household substances.
+</introduction>
+
+<objectives>
+        Use a pH Sensor to determine the pH values of household substances.
+        Identify which substances are acids or bases.
+</objectives>
+
+
+# These are the required materials for the lab
+<materials>
+        Sci-Voice Talking LabQuest
+        Vernier pH Sensor
+        250 mL beaker
+        wash bottle
+        distilled water
+        ring stand
+        utility clamp
+        sensor soaking solution
+        household solutions
+        seven small test tubes
+        test-tube rack
+        stirring rod
+        paper towel
+</materials>
+
+
+# Below is the procedure of the lab.
+<procedure>
+        Obtain and wear goggles. CAUTION: Do not eat or drink in the laboratory.
+
+        <section: Part 1 pH Tests>
+                <task: 1>
+                        Label 5 test tubes with the numbers 1–5 and place them in a test tube rack. Measure 3 mL of vinegar into test tube #1.
+			Refer to the data table and fill each of the test tubes 2–5 to about
+ 			the same level with its respective solution. Prepare the pH Sensor for data collection:
+			            <subTask: a>
+                                Connect the pH Sensor to a Sci-Voice Talking LabQuest.
+                        </subTask>
+
+                        <subTask: b>
+                                Remove the pH Sensor from the sensor storage solution bottle by unscrewing the lid. Carefully remove the bottle, leaving the cap on the sensor body.
+                        </subTask>
+
+                        <subTask: c>
+                                Rinse the tip of the sensor with distilled water and place the sensor tip into a beaker containing sensor soaking solution. Use a utility clamp to fasten the pH                                 			Sensor to a ring stand, as shown in Figure 1.
+                        </subTask>
+                </task>
+
+
+                <task: 2>
+                        Raise the pH Sensor from the sensor soaking solution and set the solution aside. Use a wash bottle filled with distilled water to thoroughly rinse the pH Sensor. Catch                          			the rinse water in a 250 mL beaker. Obtain one of the 5 solutions in the small container supplied by your teacher. Raise the solution to the pH Sensor and swirl the                             			solution about the sensor. When the pH reading stabilizes, record the pH value.
+                </task>
+
+                <task: 3>
+                        Prepare the pH Sensor for reuse
+                        <subTask: 1>
+                                Rinse it with distilled water from a wash bottle.
+                        </subTask>
+                        <subTask: 2>
+                                Place the sensor into the sensor soaking solution and swirl the solution about the sensor briefly.
+                        </subTask>
+
+                        <subTask: 3>
+				Rinse with distilled water again.
+                        </subTask>
+                </task>
+
+
+                <task: 4>
+                        Determine the pH of the other solutions using the Step 6 procedure. You must clean the pH Sensor between tests using the Step 7 procedure.
+                </task>
+
+
+                <task: 5>
+                        When you are finished, rinse the sensor with distilled water and return it to the sensor soaking solution.
+                </task>
+        </section>
+</procedure>
+
+<questions>
+	Which of the household solutions tested are acids? How can you tell?
+	Which of the solutions are bases? How can you tell?
+	What happened when an acid was added to a base?
+	What happened when a base was added to an acid?
+	What happened when acid was added to an acid?
+	What happened when base was added to a base?
+</questions>
