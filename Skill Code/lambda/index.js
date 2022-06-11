@@ -1,6 +1,8 @@
 const Alexa = require('ask-sdk-core');
-const main = require('./main.js');
-const vlaTxtReader = require('./vlaTxtReader.js');
+const driver = require('./main.js');
+
+let main = driver.main;
+
 
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
@@ -52,8 +54,7 @@ const BeginLabIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'BeginLabIntent';
     },
     handle(handlerInput) {
-        main.materials.loadMaterialsList(); //loads the materials list for lab 1 from the text file located in ./Labs
-        const speechText = main.instructions.loadInstructions() + main.instructions.getStepAndInstruction();
+        const speechText = main.loadLab('./Labs/exampleLab.txt') + main.getStepAndInstruction();
         return handlerInput.responseBuilder
             .speak(speechText)
             .reprompt()
@@ -68,9 +69,7 @@ const ExitLabIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'ExitLabIntent';
     },
     handle(handlerInput) {
-         //Clears current materials list, instructions, and resets instruction counter.
-        main.materials.exitLab();
-        const speechText = main.instructions.exitLab();
+        const speechText = main.exitLab();
         return handlerInput.responseBuilder
             .speak(speechText)
             .reprompt()
@@ -85,7 +84,7 @@ const GetStepIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'GetStepIntent';
     },
     handle(handlerInput) {
-        const speechText = main.instructions.getStepAndInstruction();
+        const speechText = main.getStepAndInstruction();
         return handlerInput.responseBuilder
             .speak(speechText)
             .reprompt()
@@ -100,7 +99,7 @@ const MaterialsListIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'MaterialsListIntent';
     },
     handle(handlerInput) {
-        const speechText = main.materials.getMaterials()
+        const speechText = main.getMaterials();
         return handlerInput.responseBuilder
             .speak(speechText)
             .reprompt()
@@ -115,7 +114,7 @@ const NextStepIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'NextStepIntent';
     },
     handle(handlerInput) {
-        const speechText = main.instructions.nextStep();
+        const speechText = main.nextStep();
         
         return handlerInput.responseBuilder
             .speak(speechText)
@@ -131,7 +130,7 @@ const PreviousStepIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'PreviousStepIntent';
     },
     handle(handlerInput) {
-        const speechText = main.instructions.previousStep();
+        const speechText = main.previousStep();
         
         return handlerInput.responseBuilder
             .speak(speechText)
@@ -179,7 +178,7 @@ const remainingStepsIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'remainingStepsIntent';
     },
     handle(handlerInput) {
-        const speechText = main.instructions.getRemainingSteps();
+        const speechText = main.getRemainingSteps();
         
         return handlerInput.responseBuilder
             .speak(speechText)
@@ -274,6 +273,7 @@ exports.handler = Alexa.SkillBuilders.custom()
         CancelAndStopIntentHandler,
         SessionEndedRequestHandler,
         IntentReflectorHandler) // make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
+    
     .addErrorHandlers(
         ErrorHandler)
     .lambda();
